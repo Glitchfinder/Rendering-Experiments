@@ -1,0 +1,33 @@
+# Object files
+*.o
+*o.d
+*.ko
+
+# Binary files
+*.a
+*.dll
+
+# Build directories
+bin/
+inc/
+obj/
+deps/
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Logs
+*.log
+
+# Miscellaneous
+*.layout
+*.depend
+
+# Mac filesystem dust
+/.DS_Store
+
+# Windows filesystem dust
+desktop.ini
+Thumbs.db

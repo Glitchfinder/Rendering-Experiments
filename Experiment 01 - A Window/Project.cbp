@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Experiment 01 - A Window" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/Experiment01" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Release" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-O2" />
+			<Add option="-Wall" />
+			<Add option="-DGLEW_STATIC" />
+			<Add directory="../deps/inc" />
+		</Compiler>
+		<Linker>
+			<Add option="-static" />
+			<Add option="-static-libgcc" />
+			<Add option="-lglew_static" />
+			<Add option="-lglfw3" />
+			<Add option="-lopengl32" />
+			<Add option="-lgdi32" />
+			<Add directory="../deps/lib/glew-1.10.0" />
+			<Add directory="../deps/lib/glfw-3.0.4" />
+		</Linker>
+		<Unit filename="src/main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

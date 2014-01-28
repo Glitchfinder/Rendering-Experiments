@@ -1,0 +1,9 @@
+ ** Dependencies
+      - glew 1.10.0 (static) http://glew.sourceforge.net/
+      - glfw 3.0.4  (static) http://www.glfw.org/
+
+ ** Compiled With
+      - MinGW 4.7.1 on Windows 7 Professional x64
+
+ ** Last Compiled
+      - January 28th, 2014
