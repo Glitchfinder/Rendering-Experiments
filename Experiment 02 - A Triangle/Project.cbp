@@ -35,6 +35,10 @@
 			<Add after='cmd /c copy &quot;$(PROJECTDIR)src\shaders\SimpleVertexShader.vshader&quot; &quot;$(TARGET_OUTPUT_DIR)SimpleVertexShader.vshader&quot;' />
 			<Add after='cmd /c copy &quot;$(PROJECTDIR)src\shaders\SimpleFragmentShader.fshader&quot; &quot;$(TARGET_OUTPUT_DIR)SimpleFragmentShader.fshader&quot;' />
 		</ExtraCommands>
+		<Unit filename="src/Graphics.cpp" />
+		<Unit filename="src/Graphics.h" />
+		<Unit filename="src/Shaders.cpp" />
+		<Unit filename="src/Shaders.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/shaders/SimpleFragmentShader.fshader" />
 		<Unit filename="src/shaders/SimpleVertexShader.vshader" />

@@ -31,6 +31,8 @@
 			<Add directory="../deps/lib/glew-1.10.0" />
 			<Add directory="../deps/lib/glfw-3.0.4" />
 		</Linker>
+		<Unit filename="src/Graphics.cpp" />
+		<Unit filename="src/Graphics.h" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />

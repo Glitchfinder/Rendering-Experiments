@@ -47,7 +47,7 @@ int main() {
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
 		fprintf(stderr, "Failed to initialize GLEW\n");
-		//return -1;
+		return -1;
 	}
 
 	// Ensure capture of the escape key
@@ -176,11 +176,8 @@ int main() {
 	glm::mat4 mvp = proj * view * mod;
 
 	// Set up an actual game loop
-	bool   running = true;
-	time_t lastSync;
-	time_t currentTime;
-	double timeSinceLastRefresh;
-	time(&lastSync);
+	bool   running  = true;
+	double lastSync = glfwGetTime();
 
 	// Set up a frame counter
 	double lastTime = glfwGetTime();
@@ -195,21 +192,52 @@ int main() {
 			fprintf(stdout, "%f ms/frames\n", 1000.0/double(nbFrames));
 			nbFrames = 0;
 			lastTime += 1.0;
+
+			// Seed random and get base color values
+			srand(static_cast<unsigned>(rand()));
+			float posR = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+			float negR = 1.0f - posR;
+			float posG = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+			float negG = 1.0f - posG;
+			float posB = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+			float negB = 1.0f - posB;
+
+			float modR = 0.0f;
+			float modG = 0.0f;
+			float modB = 0.0f;
+
+			// Vertex colors
+			static GLfloat cbData[12*3*3];
+			// Generate vertex colors
+			for (int v = 0; v < 12 * 3; v++) {
+				if (v % 6 == 0) {
+					modR = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+					modG = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+					modB = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+				}
+
+				cbData[3 * v    ] = (vbData[3 * v    ] > 0 ? posR : negR); // Red
+				cbData[3 * v + 1] = (vbData[3 * v + 1] > 0 ? posG : negG); // Green
+				cbData[3 * v + 2] = (vbData[3 * v + 2] > 0 ? posB : negB); // Blue
+
+				cbData[3 * v    ] = (cbData[3 * v    ] + modR) / 2.0f; // Red
+				cbData[3 * v + 1] = (cbData[3 * v + 1] + modG) / 2.0f; // Green
+				cbData[3 * v + 2] = (cbData[3 * v + 2] + modB) / 2.0f; // Blue
+			}
+
+			// Toss the vertices and buffer at OpenGL
+			glBufferData(GL_ARRAY_BUFFER, sizeof(cbData), cbData, GL_STATIC_DRAW);
 		}
 
-		// Check timing
-		time(&currentTime);
-		timeSinceLastRefresh = 1000.0 * difftime(currentTime, lastSync);
-
 		// Update graphics if appropriate
-		if (timeSinceLastRefresh >= 0.016) { // 16MS = 60FPS
+		if (cTime - lastSync >= 16.0 / 1000.0) { //16MS = 60FPS
 			draw(pid, mid, vBuffer, cBuffer, mvp);
 
 			// Swap buffers
 			glfwSwapBuffers(window);
 
 			// Update sync
-			lastSync = currentTime;
+			lastSync = glfwGetTime();
 		}
 
 		// Poll events
