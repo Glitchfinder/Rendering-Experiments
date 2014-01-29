@@ -51,13 +51,6 @@ int main() {
 	// Ensure capture of the escape key
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-	// Set up an actual game loop
-	bool   running = true;
-	time_t lastSync;
-	time_t currentTime;
-	double timeSinceLastRefresh;
-	time(&lastSync);
-
 	// Set up the Vertex Array Object
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
@@ -86,18 +79,41 @@ int main() {
 	// Toss the vertices and buffer at OpenGL
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vbData), vbData, GL_STATIC_DRAW);
 
+	// Set up an actual game loop
+	bool   running = true;
+	time_t lastSync;
+	time_t currentTime;
+	double timeSinceLastRefresh;
+	time(&lastSync);
+
+	// Set up a frame counter
+	double lastTime = glfwGetTime();
+	int nbFrames    = 0;
+
 	while (running) {
+		// Measure frame speed
+		double cTime = glfwGetTime();
+		nbFrames++;
+
+		if (cTime - lastTime >= 1.0) {
+			fprintf(stdout, "%f ms/frames\n", 1000.0/double(nbFrames));
+			nbFrames = 0;
+			lastTime += 1.0;
+		}
+
 		// Check timing
 		time(&currentTime);
 		timeSinceLastRefresh = 1000.0 * difftime(currentTime, lastSync);
 
 		// Update graphics if appropriate
 		if (timeSinceLastRefresh >= 0.016) { // 16MS = 60FPS
-			// We're not drawing anything yet
 			draw(pid, vertexBuffer);
 
 			// Swap buffers
 			glfwSwapBuffers(window);
+
+			// Update sync
+			lastSync = currentTime;
 		}
 
 		// Poll events

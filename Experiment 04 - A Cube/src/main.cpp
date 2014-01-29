@@ -117,37 +117,37 @@ int main() {
 	// Toss the vertices and buffer at OpenGL
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vbData), vbData, GL_STATIC_DRAW);
 
-    // Seed random and get base color values
-    srand(static_cast<unsigned>(time(0)));
-    float posR = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-    float negR = 1.0f - posR;
-    float posG = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-    float negG = 1.0f - posG;
-    float posB = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-    float negB = 1.0f - posB;
+	// Seed random and get base color values
+	srand(static_cast<unsigned>(time(0)));
+	float posR = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	float negR = 1.0f - posR;
+	float posG = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	float negG = 1.0f - posG;
+	float posB = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+	float negB = 1.0f - posB;
 
-    float modR;
-    float modG;
-    float modB;
+	float modR = 0.0f;
+	float modG = 0.0f;
+	float modB = 0.0f;
 
 	// Vertex colors
 	static GLfloat cbData[12*3*3];
-    // Generate vertex colors
-    for (int v = 0; v < 12 * 3; v++) {
-        if (v % 6 == 0) {
-            modR = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-            modG = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-            modB = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-        }
+	// Generate vertex colors
+	for (int v = 0; v < 12 * 3; v++) {
+		if (v % 6 == 0) {
+			modR = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+			modG = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+			modB = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+		}
 
-        cbData[3 * v    ] = (vbData[3 * v    ] > 0 ? posR : negR); // Red
-        cbData[3 * v + 1] = (vbData[3 * v + 1] > 0 ? posG : negG); // Green
-        cbData[3 * v + 2] = (vbData[3 * v + 2] > 0 ? posB : negB); // Blue
+		cbData[3 * v    ] = (vbData[3 * v    ] > 0 ? posR : negR); // Red
+		cbData[3 * v + 1] = (vbData[3 * v + 1] > 0 ? posG : negG); // Green
+		cbData[3 * v + 2] = (vbData[3 * v + 2] > 0 ? posB : negB); // Blue
 
-        cbData[3 * v    ] = (cbData[3 * v    ] + modR) / 2.0f; // Red
-        cbData[3 * v + 1] = (cbData[3 * v + 1] + modG) / 2.0f; // Green
-        cbData[3 * v + 2] = (cbData[3 * v + 2] + modB) / 2.0f; // Blue
-    }
+		cbData[3 * v    ] = (cbData[3 * v    ] + modR) / 2.0f; // Red
+		cbData[3 * v + 1] = (cbData[3 * v + 1] + modG) / 2.0f; // Green
+		cbData[3 * v + 2] = (cbData[3 * v + 2] + modB) / 2.0f; // Blue
+	}
 
 	// Color buffer id
 	GLuint cBuffer;
@@ -156,13 +156,6 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, cBuffer);
 	// Toss the vertices and buffer at OpenGL
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cbData), cbData, GL_STATIC_DRAW);
-
-	// Set up an actual game loop
-	bool   running = true;
-	time_t lastSync;
-	time_t currentTime;
-	double timeSinceLastRefresh;
-	time(&lastSync);
 
 	// Get a handle for our mvp uniform
 	// Only do this at initialization
@@ -182,7 +175,28 @@ int main() {
 	// Our ModelViewProjection
 	glm::mat4 mvp = proj * view * mod;
 
+	// Set up an actual game loop
+	bool   running = true;
+	time_t lastSync;
+	time_t currentTime;
+	double timeSinceLastRefresh;
+	time(&lastSync);
+
+	// Set up a frame counter
+	double lastTime = glfwGetTime();
+	int nbFrames    = 0;
+
 	while (running) {
+		// Measure frame speed
+		double cTime = glfwGetTime();
+		nbFrames++;
+
+		if (cTime - lastTime >= 1.0) {
+			fprintf(stdout, "%f ms/frames\n", 1000.0/double(nbFrames));
+			nbFrames = 0;
+			lastTime += 1.0;
+		}
+
 		// Check timing
 		time(&currentTime);
 		timeSinceLastRefresh = 1000.0 * difftime(currentTime, lastSync);
@@ -193,6 +207,9 @@ int main() {
 
 			// Swap buffers
 			glfwSwapBuffers(window);
+
+			// Update sync
+			lastSync = currentTime;
 		}
 
 		// Poll events

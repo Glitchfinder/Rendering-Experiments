@@ -81,13 +81,6 @@ int main() {
 	// Toss the vertices and buffer at OpenGL
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vbData), vbData, GL_STATIC_DRAW);
 
-	// Set up an actual game loop
-	bool   running = true;
-	time_t lastSync;
-	time_t currentTime;
-	double timeSinceLastRefresh;
-	time(&lastSync);
-
 	// Get a handle for our mvp uniform
 	// Only do this at initialization
 	GLuint mid = glGetUniformLocation(pid, "MVP");
@@ -106,7 +99,28 @@ int main() {
 	// Our ModelViewProjection
 	glm::mat4 mvp = proj * view * mod;
 
+	// Set up an actual game loop
+	bool   running = true;
+	time_t lastSync;
+	time_t currentTime;
+	double timeSinceLastRefresh;
+	time(&lastSync);
+
+	// Set up a frame counter
+	double lastTime = glfwGetTime();
+	int nbFrames    = 0;
+
 	while (running) {
+		// Measure frame speed
+		double cTime = glfwGetTime();
+		nbFrames++;
+
+		if (cTime - lastTime >= 1.0) {
+			fprintf(stdout, "%f ms/frames\n", 1000.0/double(nbFrames));
+			nbFrames = 0;
+			lastTime += 1.0;
+		}
+
 		// Check timing
 		time(&currentTime);
 		timeSinceLastRefresh = 1000.0 * difftime(currentTime, lastSync);
@@ -117,6 +131,9 @@ int main() {
 
 			// Swap buffers
 			glfwSwapBuffers(window);
+
+			// Update sync
+			lastSync = currentTime;
 		}
 
 		// Poll events
