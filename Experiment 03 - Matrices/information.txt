@@ -1,0 +1,13 @@
+ ** Dependencies
+      - glew 1.10.0  (static) http://glew.sourceforge.net/
+      - glfw 3.0.4   (static) http://www.glfw.org/
+      - glm  0.9.5.1 (static) http://glm.g-truc.net
+
+ ** Compiled With
+      - MinGW 4.7.1 on Windows 7 Professional x64
+
+ ** Last Compiled
+      - January 28th, 2014
+
+ ** Additional Notes
+      - The *.*shader files must be placed into the output directory
