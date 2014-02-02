@@ -7,7 +7,7 @@
       - MinGW 4.7.1 on Windows 7 Professional x64
 
  ** Last Compiled
-      - January 28th, 2014
+      - February 1st, 2014
 
  ** Additional Notes
       - The *.*shader files must be placed into the output directory
